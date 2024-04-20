@@ -311,6 +311,8 @@ public class BookBot extends Module {
 
         // Write data to book
         mc.player.getMainHandStack().setSubNbt("title", NbtString.of(title));
+
+        // Sadly, you cannot change this: if someone gets hold of the book, they will instantly know it was you who made it.
         mc.player.getMainHandStack().setSubNbt("author", NbtString.of(mc.player.getGameProfile().getName()));
 
         // Write pages NBT
