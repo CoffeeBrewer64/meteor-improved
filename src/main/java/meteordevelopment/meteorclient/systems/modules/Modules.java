@@ -383,6 +383,7 @@ public class Modules extends System<Modules> {
     }
 
     private void initCombat() {
+        add (new Aimbot());
         add(new AnchorAura());
         add(new AntiAnvil());
         add(new AntiBed());
