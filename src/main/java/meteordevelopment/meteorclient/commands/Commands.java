@@ -64,6 +64,7 @@ public class Commands {
         add(new InputCommand());
         add(new LocateCommand());
         add(new ClearChat());
+        add(new PanicCommand());
 
         COMMANDS.sort(Comparator.comparing(Command::getName));
     }
