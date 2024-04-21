@@ -33,7 +33,7 @@ public class AutoPanic extends Module {
             .description("Range in which to react.")
             .defaultValue(5)
             .min(1)
-            .sliderRange(1, 256) // default max for this is 10, upped to 256 in the hope that it will still work (128 tested working)
+            .sliderRange(1, 256)
             .build()
     );
 
