@@ -415,6 +415,7 @@ public class Modules extends System<Modules> {
     private void initPlayer() {
         add(new AntiHunger());
         add(new AutoLeave());
+        add(new AutoPanic());
         add(new AutoEat());
         add(new AutoFish());
         add(new AutoGap());
