@@ -554,6 +554,7 @@ public class Modules extends System<Modules> {
     }
 
     private void initMisc() {
+        add(new AntiVanish());
         add(new Swarm());
         add(new AntiPacketKick());
         add(new AutoClicker());
