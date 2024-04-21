@@ -70,7 +70,7 @@ public class AutoLeave extends Module {
             .description("Range in which to react.")
             .defaultValue(5)
             .min(1)
-            .sliderRange(1, 25) // default max for this is 10, upped to 25 in the hope that it will still work
+            .sliderRange(1, 256) // default max for this is 10, upped to 256 in the hope that it will still work (128 tested working)
             .build()
     );
 
