@@ -21,7 +21,7 @@ public class FovCommand extends Command {
 
     @Override
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
-        builder.then(argument("fov", IntegerArgumentType.integer(0, 150)).executes(context -> {
+        builder.then(argument("fov", IntegerArgumentType.integer(25, 150)).executes(context -> {
             ((ISimpleOption) (Object) mc.options.getFov()).set(context.getArgument("fov", Integer.class));
             return SINGLE_SUCCESS;
         }));
