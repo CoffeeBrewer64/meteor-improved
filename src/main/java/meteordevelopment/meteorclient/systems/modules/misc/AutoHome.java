@@ -47,7 +47,7 @@ public class AutoHome extends Module {
     );
 
     private final Setting<Boolean> toggleOnUse = sgGeneral.add(new BoolSetting.Builder()
-        .name("toggle-on-use")
+        .name("toggle-on-autohome")
         .description("Disables module on use (KEEP ENABLED FOR NOW)")
         .defaultValue(true)
         .build()
