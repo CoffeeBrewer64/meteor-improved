@@ -48,7 +48,7 @@ public class AutoHome extends Module {
 
     private final Setting<Boolean> toggleOnUse = sgGeneral.add(new BoolSetting.Builder()
         .name("toggle-on-autohome")
-        .description("Disables module on use (KEEP ENABLED FOR NOW)")
+        .description("Disables module on use (KEEP ENABLED OR IT WILL SPAM)")
         .defaultValue(true)
         .build()
     );
@@ -82,8 +82,7 @@ public class AutoHome extends Module {
             if (onHealth.get() == true && mc.player.getHealth() <= healthLevel.get()){
                 // Code below is commented out because it causes crashes
                 // Now I need to found out:
-                // is it pre coords?
-                // is it pre dimension? (we can always get rid of this if it is, the player likely knows what dimension they're in)
+                // is it pre coords? yes, possibly sending the message as well though
                 // is it sending the messages?
 
                 // preX = mc.player.getX();
@@ -116,7 +115,7 @@ public class AutoHome extends Module {
                 // }
                 // else
                 // {
-                //     ChatUtils.info("Before you auto homed, your position was: X: %d Y: %d Z: %d Dimension: could not get", preX, preY, preZ);
+                // ChatUtils.info("Before you auto homed, your position was: X: %d Y: %d Z: %d Dimension: could not get", preX, preY, preZ);
                 // }
 
                 
