@@ -534,6 +534,7 @@ public class Modules extends System<Modules> {
         add(new AutoSign());
         add(new AutoSmelter());
         add(new AutoWither());
+        add(new AutoExtinguish());
         add(new BuildHeight());
         add(new EChestFarmer());
         add(new EndermanLook());
