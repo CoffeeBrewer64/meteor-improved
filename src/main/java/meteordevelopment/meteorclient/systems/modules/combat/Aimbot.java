@@ -137,7 +137,7 @@ public class Aimbot extends Module {
             .name("fov-range")
             .description("Maximum Field of View (FOV) range for targeting entities.")
             .sliderRange(0, 180)
-            .defaultValue(90)
+            .defaultValue(110)
             .visible(useFovRange::get)
             .build()
     );
