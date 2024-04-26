@@ -58,8 +58,24 @@ public class AutoHome extends Module {
         .description("Hunger level at which to run /home (hunger, not saturation)")
         .defaultValue(10)
         .min(1)
-        .sliderRange(1, 4)
+        .sliderRange(1, 20)
         .visible(() -> onLowHunger.get())
+        .build()
+    );
+
+    private final Setting<Boolean> onLowSat = sgGeneral.add(new BoolSetting.Builder()
+        .name("on-low-saturation")
+        .description("Should do /home based on saturation level?")
+        .defaultValue(false)
+        .build()
+    );
+
+    private final Setting<Integer> satLevel = sgGeneral.add(new IntSetting.Builder()
+        .name("saturation-level")
+        .description("Saturation level at which to run /home (saturation, not hunger)")
+        .min(1)
+        .sliderRange(1, 20)
+        .visible(() -> onLowSat.get())
         .build()
     );
 
@@ -153,6 +169,22 @@ public class AutoHome extends Module {
                     // nada
                 }
             }
+
+            if (onLowSat.get() == true && mc.player.getHungerManager().getSaturationLevel() <= satLevel.get())
+            {
+                ChatUtils.sendPlayerMsg("/home");
+
+                if (toggleOnUse.get() == true)
+                {
+                    // disable
+                    this.toggle();
+                }
+                else
+                {
+                    // nada
+                }
+            }
+
         } else timer ++;
     }
 }
