@@ -16,7 +16,7 @@ import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 
 public class EnderChestCommand extends Command {
     public EnderChestCommand() {
-        super("ender-chest", "Allows you to preview memory of your ender chest.", "ec", "echest");
+        super("ender-chest", "Allows you to preview memory of your ender chest.", "ec", "echest", "epeek");
     }
 
     @Override
