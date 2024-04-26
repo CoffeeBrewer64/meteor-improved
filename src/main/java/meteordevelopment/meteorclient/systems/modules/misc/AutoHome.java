@@ -46,6 +46,23 @@ public class AutoHome extends Module {
         .build()
     );
 
+    private final Setting<Boolean> onLowHunger = sgGeneral.add(new BoolSetting.Builder()
+        .name("on-low-hunger")
+        .description("Should do /home based on hunger level?")
+        .defaultValue(false)
+        .build()
+    );
+
+    private final Setting<Integer> hungerLevel = sgGeneral.add(new IntSetting.Builder()
+        .name("hunger-level")
+        .description("Hunger level at which to run /home (hunger, not saturation)")
+        .defaultValue(10)
+        .min(1)
+        .sliderRange(1, 4)
+        .visible(() -> onLowHunger.get())
+        .build()
+    );
+
     private final Setting<Boolean> toggleOnUse = sgGeneral.add(new BoolSetting.Builder()
         .name("toggle-on-autohome")
         .description("Disables module on use (KEEP ENABLED OR IT WILL SPAM)")
@@ -120,6 +137,21 @@ public class AutoHome extends Module {
 
                 
                 timer = 0;
+            }
+
+            if (onLowHunger.get() == true && mc.player.getHungerManager().getFoodLevel() <= hungerLevel.get())
+            {
+                ChatUtils.sendPlayerMsg("/home");
+
+                if (toggleOnUse.get() == true)
+                {
+                    // disable
+                    this.toggle();
+                }
+                else
+                {
+                    // nada
+                }
             }
         } else timer ++;
     }
