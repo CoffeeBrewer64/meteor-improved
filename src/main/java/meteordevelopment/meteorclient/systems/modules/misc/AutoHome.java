@@ -125,6 +125,10 @@ public class AutoHome extends Module {
     public void onPacket(PacketEvent.Receive event) {
         if (event.packet instanceof PlayerListS2CPacket packet) {
             for (PlayerListS2CPacket.Entry entry : packet.getEntries()) {
+                if (onOtherSpectator.get() != true)
+                {
+                    continue;
+                }
                 if (!packet.getActions().contains(PlayerListS2CPacket.Action.UPDATE_GAME_MODE)) continue;
                 PlayerListEntry entry1 = mc.getNetworkHandler().getPlayerListEntry(entry.profileId());
                 if (entry1 == null) continue;
