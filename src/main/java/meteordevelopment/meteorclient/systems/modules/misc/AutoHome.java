@@ -129,7 +129,7 @@ public class AutoHome extends Module {
                 PlayerListEntry entry1 = mc.getNetworkHandler().getPlayerListEntry(entry.profileId());
                 if (entry1 == null) continue;
                 GameMode gameMode = entry.gameMode();
-                if (entry1.getGameMode() != gameMode) {
+                if (entry1.getGameMode() != gameMode && entry.gameMode() == GameMode.SPECTATOR) {
                     //info("Player %s changed gamemode to %s", entry1.getProfile().getName(), entry.gameMode());
                     
                     ChatUtils.sendPlayerMsg("/home");
