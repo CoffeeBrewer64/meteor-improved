@@ -540,6 +540,7 @@ public class Modules extends System<Modules> {
         add(new BuildHeight());
         add(new EChestFarmer());
         add(new EndermanLook());
+        add(new GamemodeNotifier());
         add(new Flamethrower());
         add(new LiquidFiller());
         add(new MountBypass());
