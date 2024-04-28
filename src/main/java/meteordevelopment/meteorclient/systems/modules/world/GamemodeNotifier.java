@@ -13,7 +13,6 @@ import net.minecraft.world.GameMode;
 import java.util.List;
 
 public class GamemodeNotifier extends Module {
-    private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public GamemodeNotifier() {
         super(Categories.World, "gamemode-notifier", "Notifies user when a player's gamemode is changed.");
