@@ -3,6 +3,8 @@
  * Copyright (c) Meteor Development.
  */
 
+// DiscordRPC is forever disabled in Meteor++
+
 package meteordevelopment.meteorclient.systems.modules.misc;
 
 //Created by squidoodly
