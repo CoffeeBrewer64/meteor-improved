@@ -75,7 +75,12 @@ public class AntiVanish extends Module {
     @EventHandler
     private void onPacket(PacketEvent.Receive event) {
         if (mode.get() == Mode.RealJoinMessage && event.packet instanceof CommandSuggestionsS2CPacket packet) {
-            if (completionIDs.contains(packet.getCompletionId())) {
+            if (completionIDs.contains(packet.id())) {
+		// above used to be packet.getCompletionId()
+		// https://maven.fabricmc.net/docs/yarn-1.20.6+build.1/net/minecraft/network/packet/s2c/play/CommandSuggestionsS2CPacket.html
+		// vs
+		// https://maven.fabricmc.net/docs/yarn-1.20.4+build.2/net/minecraft/network/packet/s2c/play/CommandSuggestionsS2CPacket.html
+		// same as below somewhere
                 var lastUsernames = completionPlayerCache.stream().toList();
 
                 completionPlayerCache = packet.getSuggestions().getList().stream()
@@ -100,7 +105,7 @@ public class AntiVanish extends Module {
                     }
                 }
 
-                completionIDs.remove(Integer.valueOf(packet.getCompletionId()));
+                completionIDs.remove(Integer.valueOf(packet.id()));
                 event.cancel();
             }
         }
