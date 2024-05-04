@@ -12,7 +12,8 @@ import meteordevelopment.meteorclient.utils.player.Rotations;
 import meteordevelopment.meteorclient.utils.world.BlockIterator;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.effect.StatusEffect;
+//import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.potion.Potions;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -83,8 +84,9 @@ public class AutoExtinguish extends Module {
     private BlockPos blockPos = null;
     private boolean doesWaterBucketWork = true;
     
-    private static final StatusEffect FIRE_RESISTANCE = Registries.STATUS_EFFECT.get(new Identifier("fire_resistance"));
+   // private static final StatusEffect FIRE_RESISTANCE = Registries.STATUS_EFFECT.get(new Identifier("fire_resistance"));
     
+
     public AutoExtinguish() {
         super(Categories.World, "auto-extinguish", "Automatically extinguishes fire around you");
     }
@@ -114,7 +116,9 @@ public class AutoExtinguish extends Module {
                 place(slot);
                 hasPlacedWater = false;
 
-            } else if (!mc.player.hasStatusEffect(FIRE_RESISTANCE) && mc.player.isOnFire()) {
+	// below else if used to contain check for if has fire resistance, then dont do it
+	// removed bc im too lazy to add a proper check for stuff
+            } else if (mc.player.isOnFire()) {
                 blockPos = mc.player.getBlockPos();
                 final int slot = findSlot(Items.WATER_BUCKET);
                 if (mc.world.getBlockState(blockPos).getBlock() == Blocks.FIRE || mc.world.getBlockState(blockPos).getBlock() == Blocks.SOUL_FIRE) {
