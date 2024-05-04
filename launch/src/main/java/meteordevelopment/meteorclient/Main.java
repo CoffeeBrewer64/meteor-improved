@@ -9,8 +9,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Locale;
 
@@ -85,8 +83,8 @@ public class Main {
 
         public void open(String url) {
             try {
-                open(new URI(url).toURL());
-            } catch (URISyntaxException | MalformedURLException e) {
+                open(new URL(url));
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         }

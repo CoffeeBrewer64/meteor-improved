@@ -157,7 +157,7 @@ public class NotebotCommand extends Command {
     }
 
     private void saveRecording(Path path) {
-        if (song.isEmpty()) {
+        if (song.size() < 1) {
             MeteorClient.EVENT_BUS.unsubscribe(this);
             return;
         }

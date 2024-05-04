@@ -26,9 +26,6 @@ public class GuiThemes {
     private static final List<GuiTheme> themes = new ArrayList<>();
     private static GuiTheme theme;
 
-    private GuiThemes() {
-    }
-
     @PreInit
     public static void init() {
         add(new MeteorGuiTheme());

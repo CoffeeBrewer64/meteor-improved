@@ -16,7 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 
-public class PacketUtilsUtil {
+public abstract class PacketUtilsUtil {
     private static final String packetRegistryClass = """
     private static class PacketRegistry extends SimpleRegistry<Class<? extends Packet<?>>> {
         public PacketRegistry() {
@@ -54,13 +54,18 @@ public class PacketUtilsUtil {
         }
 
         @Override
+        public Lifecycle getEntryLifecycle(Class<? extends Packet<?>> object) {
+            return null;
+        }
+
+        @Override
         public Lifecycle getLifecycle() {
             return null;
         }
 
         @Override
         public Set<Identifier> getIds() {
-            return Collections.emptySet();
+            return null;
         }
 
         @Override
@@ -152,9 +157,6 @@ public class PacketUtilsUtil {
     }
 """;
 
-    private PacketUtilsUtil() {
-    }
-
     public static void main(String[] args) {
         try {
             init();
@@ -199,7 +201,7 @@ public class PacketUtilsUtil {
             writer.write("import java.util.stream.Stream;\n");
 
             //   Write class
-            writer.write("\npublic class PacketUtils {\n");
+            writer.write("\npublic abstract class PacketUtils {\n");
 
             //     Write fields
             writer.write("    public static final Registry<Class<? extends Packet<?>>> REGISTRY = new PacketRegistry();\n\n");
@@ -240,9 +242,6 @@ public class PacketUtilsUtil {
                 writer.write("        S2C_PACKETS_R.put(\"%s\", %s.class);%n".formatted(className, fullName));
             }
 
-            writer.write("    }\n\n");
-
-            writer.write("    private PacketUtils() {\n");
             writer.write("    }\n\n");
 
             //     Write getName method

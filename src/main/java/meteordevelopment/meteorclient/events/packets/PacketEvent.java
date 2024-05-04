@@ -6,7 +6,7 @@
 package meteordevelopment.meteorclient.events.packets;
 
 import meteordevelopment.meteorclient.events.Cancellable;
-import net.minecraft.network.ClientConnection;
+import net.minecraft.network.listener.PacketListener;
 import net.minecraft.network.packet.Packet;
 
 public class PacketEvent {
@@ -14,12 +14,12 @@ public class PacketEvent {
         private static final Receive INSTANCE = new Receive();
 
         public Packet<?> packet;
-        public ClientConnection connection;
+        public PacketListener packetListener;
 
-        public static Receive get(Packet<?> packet, ClientConnection connection) {
+        public static Receive get(Packet<?> packet, PacketListener listener) {
             INSTANCE.setCancelled(false);
             INSTANCE.packet = packet;
-            INSTANCE.connection = connection;
+            INSTANCE.packetListener = listener;
             return INSTANCE;
         }
     }
@@ -27,7 +27,6 @@ public class PacketEvent {
     public static class Send extends Cancellable {
         private static final Send INSTANCE = new Send();
 
-        // overwriting this will overwrite the packet being sent
         public Packet<?> packet;
 
         public static Send get(Packet<?> packet) {

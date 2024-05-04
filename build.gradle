@@ -1,14 +1,12 @@
 plugins {
-    id "fabric-loom" version "1.6-SNAPSHOT"
+    id "fabric-loom" version "1.5-SNAPSHOT"
     id "maven-publish"
     id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
-base {
-    archivesBaseName = project.archives_base_name
-    version = project.mod_version + (project.hasProperty("devbuild") ? ("-" + project.findProperty("devbuild")) : "")
-    group = project.maven_group
-}
+archivesBaseName = project.archives_base_name
+version = project.mod_version + (project.hasProperty("devbuild") ? ("-" + project.findProperty("devbuild")) : "")
+group = project.maven_group
 
 repositories {
     maven {
@@ -85,67 +83,65 @@ afterEvaluate {
     }
 }
 
-tasks {
-    processResources {
-        def propertyMap = [
-            "version"          : project.version,
-            "devbuild"         : project.findProperty("devbuild") ?: "",
-            "commit"           : project.findProperty("commit") ?: "",
-            "minecraft_version": project.minecraft_version,
-            "loader_version"   : project.loader_version
-        ]
+shadowJar {
+    configurations = [project.configurations.shadow]
 
-        inputs.properties(propertyMap)
-        filesMatching("fabric.mod.json") {
-            expand(propertyMap)
+    dependencies {
+        exclude {
+            it.moduleGroup == "org.slf4j"
         }
     }
+}
 
-    jar {
-        from("LICENSE") {
-            rename { "${it}_${project.base.archivesBaseName}" }
-        }
+processResources {
+    def propertyMap = [
+        "version"          : project.version,
+        "devbuild"         : project.findProperty("devbuild") ?: "",
+        "commit"           : project.findProperty("commit") ?: "",
+        "minecraft_version": project.minecraft_version,
+        "loader_version"   : project.loader_version
+    ]
 
-        manifest {
-            attributes("Main-Class": "meteordevelopment.meteorclient.Main")
-        }
+    inputs.properties(propertyMap)
+    filesMatching("fabric.mod.json") {
+        expand(propertyMap)
+    }
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${archivesBaseName}" }
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-
-        withSourcesJar()
-        withJavadocJar()
+    manifest {
+        attributes("Main-Class": "meteordevelopment.meteorclient.Main")
     }
+}
 
-    shadowJar {
-        configurations = [project.configurations.shadow]
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
-        from("LICENSE") {
-            rename { "${it}_${project.base.archivesBaseName}" }
-        }
+    withSourcesJar()
+}
 
-        dependencies {
-            exclude {
-                it.moduleGroup == "org.slf4j"
-            }
-        }
-    }
+remapJar {
+    dependsOn shadowJar
+    inputFile.set(shadowJar.archiveFile)
+}
 
-    remapJar {
-        dependsOn shadowJar
-        inputFile.set(shadowJar.archiveFile)
-    }
+javadoc {
+    options.addStringOption("Xdoclint:none", "-quiet")
+    options.encoding = "UTF-8"
+}
 
-    javadoc {
-        options.addStringOption("Xdoclint:none", "-quiet")
-        options.encoding = "UTF-8"
-    }
+tasks.register("javadocJar", Jar) {
+    from javadoc
+    archiveClassifier.set("javadoc")
+}
 
-    build {
-        dependsOn javadocJar
-    }
+build {
+    dependsOn javadocJar
 }
 
 publishing {

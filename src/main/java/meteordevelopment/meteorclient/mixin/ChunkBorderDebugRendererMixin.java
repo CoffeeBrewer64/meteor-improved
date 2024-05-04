@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(ChunkBorderDebugRenderer.class)
-public abstract class ChunkBorderDebugRendererMixin {
+public class ChunkBorderDebugRendererMixin {
     @Shadow
     @Final
     private MinecraftClient client;

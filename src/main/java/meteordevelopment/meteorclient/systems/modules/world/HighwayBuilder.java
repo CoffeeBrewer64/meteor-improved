@@ -987,8 +987,8 @@ public class HighwayBuilder extends Module {
                 if (itemStack.getItem() instanceof BlockItem blockItem && b.blocksToPlace.get().contains(blockItem.getBlock())) {
                     slotsWithBlocks++;
 
-                    if (itemStack.getCount() < slotWithLeastBlocksCount) {
-                        slotWithLeastBlocksCount = itemStack.getCount();
+                    if (itemStack.getCount() < slowWithLeastBlocksCount) {
+                        slowWithLeastBlocksCount = itemStack.getCount();
                         slotWithLeastBlocks = i;
                     }
                 }
@@ -1075,11 +1075,9 @@ public class HighwayBuilder extends Module {
 
             if (b.mc.player.getInventory().getStack(bestSlot).getItem() instanceof PickaxeItem ){
                 int count = countItem(b, stack -> stack.getItem() instanceof PickaxeItem);
-              
-                if (count <= b.savePickaxes.get()) {
-                    b.error("Found less than the selected amount of pickaxes required: " + count + "/" + (b.savePickaxes.get() + 1));
-                    return -1;
-                }
+
+                if (count <= b.savePickaxes.get()) b.error("Found less than the selected amount of pickaxes required: " + count + "/"  + (b.savePickaxes.get() + 1));
+                return -1;
             }
 
             // Check if the tool is already in hotbar

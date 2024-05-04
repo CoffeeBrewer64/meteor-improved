@@ -226,19 +226,19 @@ public class Modules extends System<Modules> {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onKeyBinding(KeyEvent event) {
-        if (event.action == KeyAction.Release && onBinding(true, event.key, event.modifiers)) event.cancel();
+        if (event.action == KeyAction.Press && onBinding(true, event.key)) event.cancel();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onButtonBinding(MouseButtonEvent event) {
-        if (event.action == KeyAction.Release && onBinding(false, event.button, 0)) event.cancel();
+        if (event.action == KeyAction.Press && onBinding(false, event.button)) event.cancel();
     }
 
-    private boolean onBinding(boolean isKey, int value, int modifiers) {
+    private boolean onBinding(boolean isKey, int value) {
         if (!isBinding()) return false;
 
-        if (moduleToBind.keybind.canBindTo(isKey, value, modifiers)) {
-            moduleToBind.keybind.set(isKey, value, modifiers);
+        if (moduleToBind.keybind.canBindTo(isKey, value)) {
+            moduleToBind.keybind.set(isKey, value);
             moduleToBind.info("Bound to (highlight)%s(default).", moduleToBind.keybind);
         }
         else if (value == GLFW.GLFW_KEY_ESCAPE) {
@@ -256,22 +256,22 @@ public class Modules extends System<Modules> {
     @EventHandler(priority = EventPriority.HIGH)
     private void onKey(KeyEvent event) {
         if (event.action == KeyAction.Repeat) return;
-        onAction(true, event.key, event.modifiers, event.action == KeyAction.Press);
+        onAction(true, event.key, event.action == KeyAction.Press);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onMouseButton(MouseButtonEvent event) {
         if (event.action == KeyAction.Repeat) return;
-        onAction(false, event.button, 0, event.action == KeyAction.Press);
+        onAction(false, event.button, event.action == KeyAction.Press);
     }
 
-    private void onAction(boolean isKey, int value, int modifiers, boolean isPress) {
-        if (mc.currentScreen != null || Input.isKeyPressed(GLFW.GLFW_KEY_F3)) return;
-
-        for (Module module : moduleInstances.values()) {
-            if (module.keybind.matches(isKey, value, modifiers) && (isPress || module.toggleOnBindRelease)) {
-                module.toggle();
-                module.sendToggledMsg();
+    private void onAction(boolean isKey, int value, boolean isPress) {
+        if (mc.currentScreen == null && !Input.isKeyPressed(GLFW.GLFW_KEY_F3)) {
+            for (Module module : moduleInstances.values()) {
+                if (module.keybind.matches(isKey, value) && (isPress || module.toggleOnBindRelease)) {
+                    module.toggle();
+                    module.sendToggledMsg();
+                }
             }
         }
     }
@@ -616,6 +616,11 @@ public class Modules extends System<Modules> {
 
         @Override
         public Module get(Identifier id) {
+            return null;
+        }
+
+        @Override
+        public Lifecycle getEntryLifecycle(Module object) {
             return null;
         }
 

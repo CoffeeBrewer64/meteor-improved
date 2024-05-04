@@ -25,7 +25,6 @@ import meteordevelopment.meteorclient.utils.render.RenderUtils;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -33,7 +32,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -481,12 +479,12 @@ public class Nametags extends Module {
                 if (!itemStack.isEmpty()) hasItems = true;
 
                 if (displayEnchants.get()) {
-                    ItemEnchantmentsComponent enchantments = EnchantmentHelper.getEnchantments(itemStack);
+                    Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(itemStack);
 
                     int size = 0;
-                    for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
-                        if (!shownEnchantments.get().contains(enchantment.value())) continue;
-                        String enchantName = Utils.getEnchantSimpleName(enchantment.value(), enchantLength.get()) + " " + enchantments.getLevel(enchantment.value());
+                    for (var enchantment : enchantments.keySet()) {
+                        if (!shownEnchantments.get().contains(enchantment)) continue;
+                        String enchantName = Utils.getEnchantSimpleName(enchantment, enchantLength.get()) + " " + enchantments.get(enchantment);
                         itemWidths[i] = Math.max(itemWidths[i], (text.getWidth(enchantName, shadow) / 2));
                         size++;
                     }
@@ -526,12 +524,12 @@ public class Nametags extends Module {
                 if (maxEnchantCount > 0 && displayEnchants.get()) {
                     text.begin(0.5 * enchantTextScale.get(), false, true);
 
-                    ItemEnchantmentsComponent enchantments = EnchantmentHelper.getEnchantments(stack);
+                    Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
                     Map<Enchantment, Integer> enchantmentsToShow = new HashMap<>();
 
-                    for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
-                        if (shownEnchantments.get().contains(enchantment.value())) {
-                            enchantmentsToShow.put(enchantment.value(), enchantments.getLevel(enchantment.value()));
+                    for (Enchantment enchantment : enchantments.keySet()) {
+                        if (shownEnchantments.get().contains(enchantment)) {
+                            enchantmentsToShow.put(enchantment, enchantments.get(enchantment));
                         }
                     }
 
@@ -693,7 +691,7 @@ public class Nametags extends Module {
 
     public enum DistanceColorMode {
         Gradient,
-        Flat
+        Flat;
     }
 
     public boolean excludeBots() {

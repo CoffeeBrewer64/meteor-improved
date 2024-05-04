@@ -45,7 +45,6 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
@@ -147,8 +146,6 @@ public class MeteorStarscript {
 
             .set("dimension", () -> Value.string(PlayerUtils.getDimension().name()))
             .set("opposite_dimension", () -> Value.string(PlayerUtils.getDimension().opposite().name()))
-
-            .set("gamemode", () -> mc.player != null ? Value.string(StringUtils.capitalize(PlayerUtils.getGameMode().getName())) : Value.null_())
 
             .set("pos", new ValueMap()
                 .set("_toString", () -> posString(false, false))
@@ -287,10 +284,10 @@ public class MeteorStarscript {
 
         Identifier name = popIdentifier(ss, "First argument to player.has_potion_effect() needs to a string.");
 
-        Optional<RegistryEntry.Reference<StatusEffect>> effect = Registries.STATUS_EFFECT.getEntry(name);
-        if (effect.isEmpty()) return Value.bool(false);
+        StatusEffect effect = Registries.STATUS_EFFECT.get(name);
+        if (effect == null) return Value.bool(false);
 
-        StatusEffectInstance effectInstance = mc.player.getStatusEffect(effect.get());
+        StatusEffectInstance effectInstance = mc.player.getStatusEffect(effect);
         return Value.bool(effectInstance != null);
     }
 
@@ -300,10 +297,10 @@ public class MeteorStarscript {
 
         Identifier name = popIdentifier(ss, "First argument to player.get_potion_effect() needs to a string.");
 
-        Optional<RegistryEntry.Reference<StatusEffect>> effect = Registries.STATUS_EFFECT.getEntry(name);
-        if (effect.isEmpty()) return Value.null_();
+        StatusEffect effect = Registries.STATUS_EFFECT.get(name);
+        if (effect == null) return Value.null_();
 
-        StatusEffectInstance effectInstance = mc.player.getStatusEffect(effect.get());
+        StatusEffectInstance effectInstance = mc.player.getStatusEffect(effect);
         if (effectInstance == null) return Value.null_();
 
         return wrap(effectInstance);
@@ -367,13 +364,17 @@ public class MeteorStarscript {
             ss.error("Unable to get setting %s for module %s for meteor.get_module_setting()", settingName, moduleName);
         }
         var value = setting.get();
-        return switch (value) {
-            case Double d -> Value.number(d);
-            case Integer i -> Value.number(i);
-            case Boolean b -> Value.bool(b);
-            case List<?> list -> Value.number(list.size());
-            case null, default -> Value.string(value.toString());
-        };
+        if (value instanceof Double) {
+            return Value.number((Double) value);
+        } else if (value instanceof Integer) {
+            return Value.number((Integer) value);
+        } else if (value instanceof Boolean) {
+            return Value.bool((Boolean) value);
+        } else if (value instanceof List) {
+            return Value.number(((List<?>) value).size());
+        } else {
+            return Value.string(value.toString());
+        }
     }
 
     private static Value isModuleActive(Starscript ss, int argCount) {

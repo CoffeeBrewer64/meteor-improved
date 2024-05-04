@@ -28,11 +28,8 @@ import java.util.List;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
-public class TitleScreenCredits {
+public abstract class TitleScreenCredits {
     private static final List<Credit> credits = new ArrayList<>();
-
-    private TitleScreenCredits() {
-    }
 
     private static void init() {
         // Add addons
