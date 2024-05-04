@@ -76,6 +76,7 @@ public class BaritoneSettings implements IPathManager.ISettings {
 
             for (Field field : klass.getDeclaredFields()) {
                 if (Modifier.isStatic(field.getModifiers())) continue;
+
                 Object obj = field.get(BaritoneAPI.getSettings());
                 if (!(obj instanceof baritone.api.Settings.Setting setting)) continue;
 
