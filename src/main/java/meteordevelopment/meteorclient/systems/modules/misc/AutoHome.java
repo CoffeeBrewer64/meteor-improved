@@ -18,6 +18,11 @@ import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import meteordevelopment.meteorclient.utils.player.PlayerUtils;
 import meteordevelopment.orbit.EventHandler;
 
+import meteordevelopment.meteorclient.events.packets.PacketEvent;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
+import net.minecraft.world.GameMode;
+
 // todo
 // auto home on someone using vanish
 // auto home on low health DONE
@@ -79,6 +84,13 @@ public class AutoHome extends Module {
         .build()
     );
 
+    private final Setting<Boolean> onOtherSpectator = sgGeneral.add(new BoolSetting.Builder()
+        .name("on-spectator")
+        .description("Should do /home if someone goes into spectator (delay doesn't apply)")
+        .defaultValue(true)
+        .build()
+    );
+
     private final Setting<Boolean> toggleOnUse = sgGeneral.add(new BoolSetting.Builder()
         .name("toggle-on-autohome")
         .description("Disables module on use (KEEP ENABLED OR IT WILL SPAM)")
@@ -88,7 +100,7 @@ public class AutoHome extends Module {
 
     private final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
         .name("delay")
-        .description("Delay after sending the command in ticks (20 ticks = 1 sec).")
+        .description("Delay after sending the command in ticks (20 ticks = 1 sec)")
         .defaultValue(10)
         .min(1)
         .sliderRange(1, 40)
@@ -107,6 +119,37 @@ public class AutoHome extends Module {
     @Override
     public void onActivate() {
         timer = 0;
+    }
+
+    @EventHandler
+    public void onPacket(PacketEvent.Receive event) {
+        if (event.packet instanceof PlayerListS2CPacket packet) {
+            for (PlayerListS2CPacket.Entry entry : packet.getEntries()) {
+                if (onOtherSpectator.get() != true)
+                {
+                    continue;
+                }
+                if (!packet.getActions().contains(PlayerListS2CPacket.Action.UPDATE_GAME_MODE)) continue;
+                PlayerListEntry entry1 = mc.getNetworkHandler().getPlayerListEntry(entry.profileId());
+                if (entry1 == null) continue;
+                GameMode gameMode = entry.gameMode();
+                if (entry1.getGameMode() != gameMode && entry.gameMode() == GameMode.SPECTATOR) {
+                    //info("Player %s changed gamemode to %s", entry1.getProfile().getName(), entry.gameMode());
+                    
+                    ChatUtils.sendPlayerMsg("/home");
+
+                    if (toggleOnUse.get() == true)
+                    {
+                        // disable
+                        this.toggle();
+                    }
+                    else
+                    {
+                        // nada
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler

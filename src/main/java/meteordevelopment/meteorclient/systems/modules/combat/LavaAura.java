@@ -40,45 +40,45 @@ public class LavaAura extends Module {
     private final Setting<Mode> mode = sgGeneral.add(new EnumSetting.Builder<Mode>()
             .name("mode")
             .description("Selects the mode for placing around entities - Lava or Fire.")
-            .defaultValue(Mode.LAVA)
+            .defaultValue(Mode.Lava)
             .build()
     );
     private final Setting<FireMode> fireMode = sgGeneral.add(new EnumSetting.Builder<FireMode>()
             .name("fire-mode")
             .description("Selects the fire mode for placing fire - Flint and Steel or Fire Charge.")
-            .defaultValue(FireMode.FLINT_AND_STEEL)
-            .visible(() -> mode.get() == Mode.FIRE)
+            .defaultValue(FireMode.FlintAndSteel)
+            .visible(() -> mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Boolean> noburnburning = sgFIRE.add(new BoolSetting.Builder()
             .name("No Burn Already Burning")
             .description("Do not burn already burning entities")
             .defaultValue(true)
-            .visible(() -> mode.get() == Mode.FIRE)
+            .visible(() -> mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Boolean> nolavaburning = sgLAVA.add(new BoolSetting.Builder()
             .name("No Lava Already Burning")
             .description("Do not Lava already burning entities")
             .defaultValue(false)
-            .visible(() -> mode.get() == Mode.LAVA)
+            .visible(() -> mode.get() == Mode.Lava)
             .build()
     );
     private final Setting<Set<EntityType<?>>> entities = sgGeneral.add(new EntityTypeListSetting.Builder()
             .name("entities")
-            .description("Entities to Lava.")
+            .description("Entities to Lava")
             .defaultValue(EntityType.PLAYER, EntityType.VILLAGER)
             .build()
     );
     public final Setting<Boolean> trollfriends = sgGeneral.add(new BoolSetting.Builder()
             .name("Lava/Burn Friends")
-            .description("Lava bucket your friends too")
+            .description("Lava bucket your friends")
             .defaultValue(false)
             .build()
     );
     private final Setting<Double> range = sgGeneral.add(new DoubleSetting.Builder()
             .name("range")
-            .description("Lava/Fire placement range.")
+            .description("Lava/Fire placement range")
             .defaultValue(6)
             .min(2)
             .sliderRange(2, 10)
@@ -86,7 +86,7 @@ public class LavaAura extends Module {
     );
     private final Setting<Double> noburnrange = sgGeneral.add(new DoubleSetting.Builder()
             .name("Don't Burn Range")
-            .description("Range around player to not burn.")
+            .description("Range around player to not burn")
             .defaultValue(3)
             .min(0)
             .sliderRange(0, 10)
@@ -98,14 +98,14 @@ public class LavaAura extends Module {
             .defaultValue(0)
             .min(0)
             .sliderMax(20)
-            .visible(() -> mode.get() == Mode.LAVA)
+            .visible(() -> mode.get() == Mode.Lava)
             .build()
     );
     public final Setting<Boolean> pickup = sgLAVA.add(new BoolSetting.Builder()
             .name("Pickup Lava")
             .description("Pickup lava after placing")
             .defaultValue(true)
-            .visible(() -> mode.get() == Mode.LAVA)
+            .visible(() -> mode.get() == Mode.Lava)
             .build()
     );
     public final Setting<Integer> pickuptickdelay = sgLAVA.add(new IntSetting.Builder()
@@ -114,7 +114,7 @@ public class LavaAura extends Module {
             .defaultValue(2)
             .min(0)
             .sliderMax(20)
-            .visible(() -> pickup.get() && mode.get() == Mode.LAVA)
+            .visible(() -> pickup.get() && mode.get() == Mode.Lava)
             .build()
     );
     public final Setting<Integer> placefiretickdelay = sgFIRE.add(new IntSetting.Builder()
@@ -123,14 +123,14 @@ public class LavaAura extends Module {
             .defaultValue(0)
             .min(0)
             .sliderMax(20)
-            .visible(() -> mode.get() == Mode.FIRE)
+            .visible(() -> mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Boolean> extinguish = sgFIRE.add(new BoolSetting.Builder()
             .name("Extinguish Fire")
-            .description("Extinguish fire after placing")
+            .description("Extinguish fire after placing (disable AutoExtinguish with this!)")
             .defaultValue(true)
-            .visible(() -> mode.get() == Mode.FIRE)
+            .visible(() -> mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Integer> extinguishtickdelay = sgFIRE.add(new IntSetting.Builder()
@@ -139,21 +139,21 @@ public class LavaAura extends Module {
             .defaultValue(5)
             .min(0)
             .sliderMax(20)
-            .visible(() -> extinguish.get() && mode.get() == Mode.FIRE)
+            .visible(() -> extinguish.get() && mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Boolean> norotate = sgFIRE.add(new BoolSetting.Builder()
             .name("No Rotations")
             .description("Do not rotate to the target to burn them")
             .defaultValue(true)
-            .visible(() -> mode.get() == Mode.FIRE)
+            .visible(() -> mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Boolean> ignorewalls = sgFIRE.add(new BoolSetting.Builder()
             .name("Ignore Walls")
             .description("Burn things through walls")
             .defaultValue(true)
-            .visible(() -> mode.get() == Mode.FIRE)
+            .visible(() -> mode.get() == Mode.Fire)
             .build()
     );
     public final Setting<Integer> maxtargets = sgGeneral.add(new IntSetting.Builder()
@@ -172,34 +172,34 @@ public class LavaAura extends Module {
     );
     private final Setting<Boolean> burnflammableonly = sgBurnEverything.add(new BoolSetting.Builder()
             .name("Target Flammable Only")
-            .description("Lava or set fire to only the flammable blocks.")
+            .description("Lava or set fire to flammable blocks only")
             .defaultValue(true)
             .visible(() -> lavaeverything.get())
             .build()
     );
     private final Setting<Boolean> ignorebelowplayer = sgBurnEverything.add(new BoolSetting.Builder()
             .name("Burn Only Above Player Y Level")
-            .description("Lava or set fire to only the blocks above your Y level.")
+            .description("Lava or set fire to only the blocks above your Y level")
             .defaultValue(true)
             .visible(() -> lavaeverything.get())
             .build()
     );
     private final Setting<List<Block>> skippableBlox = sgBurnEverything.add(new BlockListSetting.Builder()
             .name("Blocks to Skip")
-            .description("Skips burning these blocks.")
+            .description("Skips burning certain blocks")
             .defaultValue(Blocks.SHORT_GRASS, Blocks.TALL_GRASS)
             .visible(() -> lavaeverything.get())
             .build()
     );
     private final Setting<Boolean> pauseOnLag = sgGeneral.add(new BoolSetting.Builder()
             .name("pause-on-lag")
-            .description("Pauses if the server is lagging.")
+            .description("Pauses if the server is lagging")
             .defaultValue(true)
             .build()
     );
 
     public LavaAura() {
-        super(Categories.Combat, "lava-aura", "Kill aura with lava or fire instead.");
+        super(Categories.Combat, "lava-aura", "Kill aura with lava or fire instead");
     }
     private Set<BlockPos> lavaPlaced = new HashSet<>();
     private int ticks = 0;
@@ -240,7 +240,7 @@ public class LavaAura extends Module {
 
                     double distance = mc.player.getPos().distanceTo(entity.getPos());
 
-                    if (mode.get() == Mode.LAVA || (mode.get() == Mode.FIRE && !ignorewalls.get())) {
+                    if (mode.get() == Mode.Lava || (mode.get() == Mode.Fire && !ignorewalls.get())) {
                         BlockHitResult blockHitResult = mc.world.raycast(new RaycastContext(
                                 mc.player.getCameraPosVec(1.0f),
                                 targetPos,
@@ -255,7 +255,7 @@ public class LavaAura extends Module {
 
                                 if (mc.world.getBlockState(targetBlockPos).getBlock() != Blocks.WATER && mc.world.getBlockState(targetBlockPos).getBlock() != Blocks.LAVA) {
                                         Block blockBelow = mc.world.getBlockState(targetBlockPos.down()).getBlock();
-                                        if (mode.get() == Mode.LAVA) {
+                                        if (mode.get() == Mode.Lava) {
                                             if (nolavaburning.get() && !entity.isOnFire() && placementTicks >= placelavatickdelay.get()){
                                                 mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, targetPos);
                                                 placeLava();
@@ -314,8 +314,8 @@ public class LavaAura extends Module {
                                                         blockBelow instanceof TntBlock ||
                                                         blockBelow instanceof TrapdoorBlock ||
                                                         blockBelow instanceof WallHangingSignBlock) &&
-                                                !blockHasOnUseMethod(mc.world.getBlockState(targetBlockPos).getBlock()) && mode.get() == Mode.FIRE) ||
-                                                mc.player.isSneaking() && mode.get() == Mode.FIRE) {
+                                                !blockHasOnUseMethod(mc.world.getBlockState(targetBlockPos).getBlock()) && mode.get() == Mode.Fire) ||
+                                                mc.player.isSneaking() && mode.get() == Mode.Fire) {
                                             if (placementTicks >= placefiretickdelay.get()){
                                                 if (!norotate.get())
                                                     mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, targetPos);
@@ -328,7 +328,7 @@ public class LavaAura extends Module {
 
                             }
                         }
-                    } else if (mode.get() == Mode.FIRE && ignorewalls.get()){
+                    } else if (mode.get() == Mode.Fire && ignorewalls.get()){
                         if (distance <= range.get() && distance > noburnrange.get()) {
                             BlockPos targetBlockPos = BlockPos.ofFloored(targetPos);
 
@@ -421,11 +421,11 @@ public class LavaAura extends Module {
 
                                 // Check if the block has not had lava placed on it
                                 if (!lavaPlaced.contains(blockPos)) {
-                                    if (mode.get() == Mode.LAVA && placementTicks >= placelavatickdelay.get()) {
+                                    if (mode.get() == Mode.Lava && placementTicks >= placelavatickdelay.get()) {
                                         mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                                         placeLava();
                                         lavaPlaced.add(blockPos);
-                                    } else if (mode.get() == Mode.FIRE) {
+                                    } else if (mode.get() == Mode.Fire) {
                                         Block blockBelow = mc.world.getBlockState(blockPos.down()).getBlock();
 
                                         if ((!mc.player.isSneaking() &&
@@ -492,7 +492,7 @@ public class LavaAura extends Module {
                 }
             }
         }
-        if (mode.get() == Mode.LAVA && pickup.get() && !lavaeverything.get()){
+        if (mode.get() == Mode.Lava && pickup.get() && !lavaeverything.get()){
             if (ticks<pickuptickdelay.get()){
                 ticks++;
             } else if (ticks>=pickuptickdelay.get()){
@@ -500,7 +500,7 @@ public class LavaAura extends Module {
                 ticks=0;
             }
         }
-        else if (mode.get() == Mode.FIRE && extinguish.get() && !lavaeverything.get()){
+        else if (mode.get() == Mode.Fire && extinguish.get() && !lavaeverything.get()){
             if (fireticks<extinguishtickdelay.get()){
                 fireticks++;
             } else if (fireticks>=extinguishtickdelay.get()){
@@ -508,7 +508,7 @@ public class LavaAura extends Module {
                 fireticks=0;
             }
         }
-        if (mode.get() == Mode.LAVA || (mode.get() == Mode.FIRE && !norotate.get())){
+        if (mode.get() == Mode.Lava || (mode.get() == Mode.Fire && !norotate.get())){
             mc.player.setYaw(originalYaw);
             mc.player.setPitch(originalPitch);
         }
@@ -533,7 +533,7 @@ public class LavaAura extends Module {
     }
     private void placeFire(BlockPos targetBlockPos) {
         FindItemResult findItemResult = InvUtils.findInHotbar(Items.FLINT_AND_STEEL);;
-        if (fireMode.get() == FireMode.FIRE_CHARGE) {
+        if (fireMode.get() == FireMode.FireCharge) {
             findItemResult = InvUtils.findInHotbar(Items.FIRE_CHARGE);
         }
 
@@ -627,11 +627,11 @@ public class LavaAura extends Module {
         mc.player.getInventory().selectedSlot = prevSlot;
     }
     public enum Mode {
-        LAVA,
-        FIRE
+        Lava,
+        Fire
     }
     public enum FireMode {
-        FLINT_AND_STEEL,
-        FIRE_CHARGE
+        FlintAndSteel,
+        FireCharge
     }
 }

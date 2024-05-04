@@ -68,7 +68,7 @@ public class AutoLeave extends Module {
     private final Setting<Double> range = sgGeneral.add(new DoubleSetting.Builder()
             .name("range")
             .description("Range in which to react.")
-            .defaultValue(5)
+            .defaultValue(256)
             .min(1)
             .sliderRange(1, 256) // default max for this is 10, upped to 256 in the hope that it will still work (128 tested working)
             .build()

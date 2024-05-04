@@ -455,6 +455,7 @@ public class Modules extends System<Modules> {
         add(new AutoWalk());
         add(new Blink());
         add(new BoatFly());
+        add(new ChorusExploit());
         add(new ClickTP());
         add(new ElytraBoost());
         add(new ElytraFly());
@@ -539,6 +540,8 @@ public class Modules extends System<Modules> {
         add(new BuildHeight());
         add(new EChestFarmer());
         add(new EndermanLook());
+        add(new GamemodeNotifier());
+        add(new NewChunks());
         add(new Flamethrower());
         add(new LiquidFiller());
         add(new MountBypass());
@@ -557,6 +560,7 @@ public class Modules extends System<Modules> {
     }
 
     private void initMisc() {
+        add(new GhostMode());
         add(new AutoHome());
         add(new AntiVanish());
         add(new Swarm());

@@ -214,11 +214,7 @@ public class HighwayBuilder extends Module {
     private final Setting<List<Item>> trashItems = sgInventory.add(new ItemListSetting.Builder()
         .name("trash-items")
         .description("Items that are considered trash and can be thrown out.")
-        .defaultValue(
-            Items.NETHERRACK, Items.QUARTZ, Items.GOLD_NUGGET, Items.GOLDEN_SWORD, Items.GLOWSTONE_DUST,
-            Items.GLOWSTONE, Items.BLACKSTONE, Items.BASALT, Items.GHAST_TEAR, Items.SOUL_SAND, Items.SOUL_SOIL,
-            Items.ROTTEN_FLESH
-        )
+        .defaultValue(Items.NETHERRACK, Items.QUARTZ, Items.GOLD_NUGGET, Items.GOLDEN_SWORD, Items.GLOWSTONE_DUST, Items.GLOWSTONE, Items.BLACKSTONE, Items.BASALT, Items.GHAST_TEAR, Items.SOUL_SAND, Items.SOUL_SOIL, Items.ROTTEN_FLESH)
         .build()
     );
 
@@ -972,7 +968,7 @@ public class HighwayBuilder extends Module {
             int thrashSlot = -1;
             int slotsWithBlocks = 0;
             int slotWithLeastBlocks = -1;
-            int slotWithLeastBlocksCount = Integer.MAX_VALUE;
+            int slowWithLeastBlocksCount = Integer.MAX_VALUE;
 
             // Loop hotbar
             for (int i = 0; i < 9; i++) {
@@ -1079,7 +1075,7 @@ public class HighwayBuilder extends Module {
 
             if (b.mc.player.getInventory().getStack(bestSlot).getItem() instanceof PickaxeItem ){
                 int count = countItem(b, stack -> stack.getItem() instanceof PickaxeItem);
-
+              
                 if (count <= b.savePickaxes.get()) {
                     b.error("Found less than the selected amount of pickaxes required: " + count + "/" + (b.savePickaxes.get() + 1));
                     return -1;
