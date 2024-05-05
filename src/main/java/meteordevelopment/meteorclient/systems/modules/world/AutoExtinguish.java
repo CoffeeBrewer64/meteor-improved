@@ -27,15 +27,9 @@ import net.minecraft.util.math.Direction;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AutoExtinguish extends Module {
-    private final SettingGroup sgGeneral = settings.createGroup("Extinguish Fire around you");
+    private final SettingGroup sgGeneral = settings.createGroup("Extinguish fire around you");
     private final SettingGroup sgBucket = settings.createGroup("Extinguish yourself");
 
-    private final Setting<Boolean> extinguish = sgGeneral.add(new BoolSetting.Builder()
-            .name("extinguish")
-            .description("Automatically extinguishes fire around you.")
-            .defaultValue(false)
-            .build()
-    );
     private final Setting<Integer> horizontalRadius = sgGeneral.add(new IntSetting.Builder()
             .name("horizontal-radius")
             .description("Horizontal radius in which to search for fire.")
@@ -139,7 +133,6 @@ public class AutoExtinguish extends Module {
             }
         }
 
-        if (extinguish.get()) {
             AtomicInteger blocksPerTick = new AtomicInteger();
             BlockIterator.register(horizontalRadius.get(), verticalRadius.get(), (blockPos, blockState) -> {
                 if (blocksPerTick.get() <= maxBlockPerTick.get()) {
@@ -149,7 +142,7 @@ public class AutoExtinguish extends Module {
                     }
                 }
             });
-        }
+        
     }
 
     private void place(int slot) {
